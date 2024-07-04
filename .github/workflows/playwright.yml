@@ -33,9 +33,9 @@ jobs:
 
       - name: Generate Playwright report summary
         run: |
-          npx playwright show-report --output=playwright-report
           echo "## Playwright Test Summary" > summary.md
-          echo "\n\n![Playwright Report](playwright-report/index.html)" >> summary.md
+          npx playwright show-report --reporter=html || true
+          echo "![Playwright Report](playwright-report/index.html)" >> summary.md
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -52,4 +52,4 @@ jobs:
           path: summary.md
 
       - name: Create summary
-        run: echo 'summary.md' >> $GITHUB_STEP_SUMMARY
+        run: cat summary.md >> $GITHUB_STEP_SUMMARY
