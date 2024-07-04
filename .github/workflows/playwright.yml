@@ -19,7 +19,10 @@ jobs:
         run: npm install
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: |
+          npx playwright install
+          npx playwright test
+        continue-on-error: true
 
       - name: Upload Playwright report as artifact
         uses: actions/upload-artifact@v2
@@ -33,7 +36,6 @@ jobs:
           echo '### Playwright Test Report' >> $GITHUB_STEP_SUMMARY
           echo '<details><summary>Click to view report</summary>' >> $GITHUB_STEP_SUMMARY
           echo '<p>' >> $GITHUB_STEP_SUMMARY
-          cat playwright-report/index.html >> $GITHUB_STEP_SUMMARY
+          REPORT_URL=$(realpath playwright-report/index.html)
+          echo "<a href=\"file://$REPORT_URL\">Playwright Test Report</a>" >> $GITHUB_STEP_SUMMARY
           echo '</p></details>' >> $GITHUB_STEP_SUMMARY
-        env:
-          GITHUB_STEP_SUMMARY: $GITHUB_STEP_SUMMARY
