@@ -31,11 +31,8 @@ jobs:
         run: |
           npx playwright test || true
 
-      - name: Generate Playwright report summary
-        run: |
-          npx playwright show-report --reporter=html || true
-          echo "## Playwright Test Summary" > summary.md
-          echo "[Playwright Report](./playwright-report/index.html)" >> summary.md
+      - name: Generate Playwright report
+        run: npx playwright show-report --reporter=html || true
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -44,6 +41,12 @@ jobs:
           name: playwright-report
           path: playwright-report
 
+      - name: Create Playwright report summary
+        run: |
+          echo "## Playwright Test Summary" > summary.md
+          echo "[Playwright Report](./playwright-report/index.html)" >> summary.md
+          cat playwright-report/index.html >> summary.md
+
       - name: Upload summary
         uses: actions/upload-artifact@v4
         if: always()
@@ -51,5 +54,5 @@ jobs:
           name: summary
           path: summary.md
 
-      - name: Create summary
+      - name: Add summary to GitHub Actions
         run: cat summary.md >> $GITHUB_STEP_SUMMARY
