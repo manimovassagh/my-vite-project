@@ -30,13 +30,28 @@ jobs:
           name: playwright-report
           path: playwright-report
 
+      - name: Parse Playwright JSON report
+        id: parse_report
+        run: |
+          REPORT_PATH="playwright-report/report.json"
+          TOTAL=$(jq '.suites | length' $REPORT_PATH)
+          PASSED=$(jq '[.suites[] | select(.status == "passed")] | length' $REPORT_PATH)
+          FAILED=$(jq '[.suites[] | select(.status == "failed")] | length' $REPORT_PATH)
+          SKIPPED=$(jq '[.suites[] | select(.status == "skipped")] | length' $REPORT_PATH)
+          echo "total=$TOTAL" >> $GITHUB_ENV
+          echo "passed=$PASSED" >> $GITHUB_ENV
+          echo "failed=$FAILED" >> $GITHUB_ENV
+          echo "skipped=$SKIPPED" >> $GITHUB_ENV
+
       - name: Add Playwright report to summary
         if: always()
         run: |
           echo '### Playwright Test Report' >> $GITHUB_STEP_SUMMARY
           echo 'Click to view report: [Playwright Test Report](./playwright-report/index.html)' >> $GITHUB_STEP_SUMMARY
           echo '#### Test Summary' >> $GITHUB_STEP_SUMMARY
-          echo '<details><summary>Test Results</summary>' >> $GITHUB_STEP_SUMMARY
-          echo '<pre>' >> $GITHUB_STEP_SUMMARY
-          cat playwright-report/report.json >> $GITHUB_STEP_SUMMARY
-          echo '</pre></details>' >> $GITHUB_STEP_SUMMARY
+          echo "- Total tests: ${{ env.total }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Passed tests: ${{ env.passed }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Failed tests: ${{ env.failed }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Skipped tests: ${{ env.skipped }}" >> $GITHUB_STEP_SUMMARY
+        env:
+          GITHUB_STEP_SUMMARY: $GITHUB_STEP_SUMMARY
