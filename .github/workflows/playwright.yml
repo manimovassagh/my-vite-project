@@ -24,7 +24,7 @@ jobs:
         run: echo "this is mani"
 
       - name: test some ls
-        run: ls -R .
+        run: ls -ltrh .
 
       - name: Run Playwright tests
         run: |
