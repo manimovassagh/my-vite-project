@@ -25,12 +25,15 @@ jobs:
 
       - name: test some ls
         run: ls -ltrh .
+        
+      - name: Create a file with multiple lines of text
+        run: |
+          echo -e "Line 1\nLine 2\nLine 3\nLine 4\nLine 5" > mani.txt
 
       - name: Upload the file
         uses: actions/upload-artifact@v3
         with:
           name: sample
-          run: echo "mani" > mani.txt
           path: mani.txt
 
       - name: Run Playwright tests
