@@ -29,7 +29,7 @@ jobs:
       - name: Upload the file
         uses: actions/upload-artifact@v3
         with:
-          name: sample-file
+          name: sample
           path: package.json
 
       - name: Run Playwright tests
@@ -69,3 +69,19 @@ jobs:
           echo "- Skipped tests: ${{ env.skipped }}" >> $GITHUB_STEP_SUMMARY
         env:
           GITHUB_STEP_SUMMARY: $GITHUB_STEP_SUMMARY
+
+
+  download:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download the file
+        uses: actions/download-artifact@v3
+        with:
+          name: sample
+          path: downloaded-files/
+
+
