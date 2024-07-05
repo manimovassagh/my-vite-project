@@ -30,7 +30,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: sample
-          path: package.json
+          run: echo "mani" > mani.txt
+          path: mani.txt
 
       - name: Run Playwright tests
         run: |
