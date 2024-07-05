@@ -23,6 +23,9 @@ jobs:
       - name: echo some items
         run: echo "this is mani"
 
+      - name: test some ls
+        run: ls -R .
+
       - name: Run Playwright tests
         run: |
           npx playwright install
