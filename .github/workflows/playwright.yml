@@ -84,4 +84,7 @@ jobs:
           name: sample
           path: downloaded-files/
 
+      - name: check dowloads
+        run: ls -ltrh downloaded-files/
+
 
