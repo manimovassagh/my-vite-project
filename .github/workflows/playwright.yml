@@ -26,6 +26,12 @@ jobs:
       - name: test some ls
         run: ls -ltrh .
 
+      - name: Upload the file
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-file
+          path: package.json
+
       - name: Run Playwright tests
         run: |
           npx playwright install
